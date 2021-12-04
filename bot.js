@@ -5,14 +5,15 @@ require('dotenv').config();
 //discord.js and client declaration
 const { joinVoiceChannel } = require('@discordjs/voice');
 
+const { clientId, guildId, token } = require('./config.json');
+
 // Discord Clientのインスタンス作成
 const options = {
     intents: ["GUILDS", "GUILD_MESSAGES"],
 };
 const client = new Client(options);
 
-// トークンの用意
-const token = process.env.TOKEN;
+let connection;
 
 // 起動するとconsoleにready...と表示される
 client.on('ready', () => {
@@ -27,14 +28,24 @@ client.on('messageCreate', message => {
         //メッセージが送られたチャンネルに HELLO!と送信する
     }
     if (message.content === "/connect") {
-        joinVoiceChannel({
+        if (!message.member.voice.channel) return message.channel.send('You need to be a voice channel to execute this command!')
+        if (!message.member.voice.channel.joinable) return message.channel.send('I need permission to join your voice channel!')
+
+
+        connection = joinVoiceChannel({
             channelId: message.member.voice.channel.id,
-            guildId: message.guild.id,
-            adapterCreator: message.guild.voiceAdapterCreator
-        }).then(message.channel.send("OK."))
+            guildId: message.member.guild.id,
+            adapterCreator: message.channel.guild.voiceAdapterCreator
+        })
+
+        console.log('Connected to voice!');
     }
-    if (message.content === "/disconnect")
-        ;
+    if (message.content === "/disconnect") {
+        //const connection = message.guild.me.voice.channel
+        if (!connection) return message.channel.send("I'm not in a voice channel!")
+        connection.destroy()
+        console.log('Disconnected from voice!');
+    }
 })
 
 // Discordへの接続
