@@ -9,7 +9,7 @@ const { clientId, guildId, token } = require('./config.json');
 
 // Discord Clientのインスタンス作成
 const options = {
-    intents: ["GUILDS", "GUILD_MESSAGES"],
+    intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_VOICE_STATES"]
 };
 const client = new Client(options);
 
