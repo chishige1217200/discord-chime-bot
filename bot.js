@@ -1,11 +1,11 @@
 // discord.js モジュールのインポート
-const { Intents, Client } = require("discord.js");
+const { Client } = require("discord.js");
 // dotenv モジュールのインポート
 require('dotenv').config();
 //discord.js and client declaration
 const { joinVoiceChannel, getVoiceConnection } = require('@discordjs/voice');
 
-const { clientId, guildId, token } = require('./config.json');
+const { token } = require('./config.json');
 
 // Discord Clientのインスタンス作成
 const options = {
