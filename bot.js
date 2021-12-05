@@ -3,7 +3,7 @@ const { Intents, Client } = require("discord.js");
 // dotenv モジュールのインポート
 require('dotenv').config();
 //discord.js and client declaration
-const { joinVoiceChannel } = require('@discordjs/voice');
+const { joinVoiceChannel, getVoiceConnection } = require('@discordjs/voice');
 
 const { clientId, guildId, token } = require('./config.json');
 
@@ -13,7 +13,7 @@ const options = {
 };
 const client = new Client(options);
 
-let connection;
+var prefix = "/";
 
 // 起動するとconsoleにready...と表示される
 client.on('ready', () => {
@@ -23,16 +23,18 @@ client.on('ready', () => {
 client.on('messageCreate', message => {
     if (message.author.bot) return; //BOTのメッセージには反応しない
 
-    if (message.content === "/hello") { //送られたメッセージが /helloだったら
-        message.channel.send("HELLO!")
+    if (message.content.toLocaleLowerCase === prefix + "hello") { //送られたメッセージが /helloだったら
+        message.channel.send("HELLO!");
         //メッセージが送られたチャンネルに HELLO!と送信する
     }
-    if (message.content === "/connect") {
-        if (!message.member.voice.channel) return message.channel.send('You need to be a voice channel to execute this command!')
+    if (message.content.toLocaleLowerCase === prefix + "help") {
+        ;
+    }
+    if (message.content.toLocaleLowerCase() === prefix + 'connect') { //ボイスチャンネルに接続する
+        if (message.member.voice.channel === null) return message.channel.send('You need to be a voice channel to execute this command!')
         if (!message.member.voice.channel.joinable) return message.channel.send('I need permission to join your voice channel!')
 
-
-        connection = joinVoiceChannel({
+        joinVoiceChannel({
             channelId: message.member.voice.channel.id,
             guildId: message.member.guild.id,
             adapterCreator: message.channel.guild.voiceAdapterCreator
@@ -40,10 +42,13 @@ client.on('messageCreate', message => {
 
         console.log('Connected to voice!');
     }
-    if (message.content === "/disconnect") {
-        //const connection = message.guild.me.voice.channel
+    if (message.content.toLocaleLowerCase() === prefix + 'disconnect') { //Here's how to leave from voice channel
+        const connection = getVoiceConnection(message.guild.id)
+
         if (!connection) return message.channel.send("I'm not in a voice channel!")
+
         connection.destroy()
+
         console.log('Disconnected from voice!');
     }
 })
