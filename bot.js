@@ -23,18 +23,18 @@ client.on('ready', () => {
 client.on('messageCreate', message => {
     if (message.author.bot) return; //BOTのメッセージには反応しない
 
-    if (message.content.toLocaleLowerCase === prefix + "hello") { //送られたメッセージが /helloだったら
+    if (message.content.toLocaleLowerCase() === prefix + "hello") { //送られたメッセージが /helloだったら
         message.channel.send("HELLO!");
         //メッセージが送られたチャンネルに HELLO!と送信する
     }
-    if (message.content.toLocaleLowerCase === prefix + "help") {
-        ;
+    if (message.content.toLocaleLowerCase() === prefix + "help") {
+        message.channel.send("```\nHELP\n  /connect: ボイスチャンネルに接続する\n  /disconnect: ボイスチャンネルから切断する\n```");;
     }
     if (message.content.toLocaleLowerCase() === prefix + 'connect') { //ボイスチャンネルに接続する
         if (message.member.voice.channel === null) return message.channel.send('You need to be a voice channel to execute this command!')
         if (!message.member.voice.channel.joinable) return message.channel.send('I need permission to join your voice channel!')
 
-        joinVoiceChannel({
+        const connection = joinVoiceChannel({
             channelId: message.member.voice.channel.id,
             guildId: message.member.guild.id,
             adapterCreator: message.channel.guild.voiceAdapterCreator
@@ -42,7 +42,7 @@ client.on('messageCreate', message => {
 
         console.log('Connected to voice!');
     }
-    if (message.content.toLocaleLowerCase() === prefix + 'disconnect') { //Here's how to leave from voice channel
+    if (message.content.toLocaleLowerCase() === prefix + 'disconnect') { //ボイスチャンネルから切断する
         const connection = getVoiceConnection(message.guild.id)
 
         if (!connection) return message.channel.send("I'm not in a voice channel!")
