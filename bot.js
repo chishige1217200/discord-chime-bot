@@ -23,6 +23,15 @@ client.on("ready", () => {
 client.on("messageCreate", message => {
     if (message.author.bot) return; //BOTのメッセージには反応しない
 
+    // おまけ機能
+    if (message.content.toLocaleLowerCase() === prefix + "buber") {
+        message.channel.send("ブーバー");
+    }
+    if (message.content.toLocaleLowerCase() === prefix + "kashidashi") {
+        message.channel.send("め・た・り・く・るさん！");
+    }
+    // おまけ機能終わり
+
     if (message.content.toLocaleLowerCase() === prefix + "hello") { //送られたメッセージが /helloだったら
         message.channel.send("HELLO!");
         //メッセージが送られたチャンネルに HELLO!と送信する
