@@ -14,6 +14,7 @@ const options = {
 const client = new Client(options);
 
 var prefix = "/";
+var general_connection = null;
 
 // 起動するとconsoleにready...と表示される
 client.on("ready", () => {
@@ -49,6 +50,8 @@ client.on("messageCreate", message => {
             adapterCreator: message.channel.guild.voiceAdapterCreator
         })
 
+        general_connection = connection;
+
         console.log("Connected to voice!");
     }
     if (message.content.toLocaleLowerCase() === prefix + "disconnect") { //ボイスチャンネルから切断する
@@ -58,7 +61,15 @@ client.on("messageCreate", message => {
 
         connection.destroy()
 
+        general_connection = null;
+
         console.log("Disconnected from voice!");
+    }
+
+    if (message.content.toLocaleLowerCase() === prefix + "test") {
+        if (general_connection === null) return message.channel.send("I'm not in a voice channel!")
+
+        console.log("Playing test sound");
     }
 })
 
