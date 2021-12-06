@@ -4,7 +4,6 @@ const { Client } = require("discord.js");
 require("dotenv").config();
 //discord.js and client declaration
 const { joinVoiceChannel, getVoiceConnection } = require("@discordjs/voice");
-const { OpusEncoder } = require("@discordjs/opus");
 const { token } = require("./config.json");
 
 // Discord Clientのインスタンス作成
@@ -12,7 +11,6 @@ const options = {
     intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_VOICE_STATES"]
 };
 const client = new Client(options);
-const encoder = new OpusEncoder(48000, 2);
 var prefix = "/";
 var general_connection = null;
 
