@@ -84,4 +84,4 @@ client.on("messageCreate", (message) => {
 });
 
 // Discordへの接続
-client.login(token);
+client.login();
